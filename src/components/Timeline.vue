@@ -1,13 +1,25 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { Post, today, thisWeek, thisMonth } from "../posts";
+import { DateTime } from "luxon";
 
-const periods = ["Today", "This week", "This month"];
-const selectedPeriod = ref("Today");
+const periods = ["Today", "This week", "This month"] as const;
 
-function selectPeriod(period: string) {
+type Period = typeof periods[number];
+
+const selectedPeriod = ref<Period>("Today");
+
+function selectPeriod(period: Period) {
   console.log(period);
   selectedPeriod.value = period;
 }
+
+const posts = [today, thisWeek, thisMonth].map((post) => {
+  return {
+    ...post,
+    created: DateTime.fromISO(post.created),
+  };
+});
 </script>
 
 <template>
@@ -22,5 +34,10 @@ function selectPeriod(period: string) {
         {{ period }}
       </a>
     </span>
+
+    <a v-for="post of posts" :key="post.id" class="panel-block">
+      <a>{{ post.title }}</a>
+      <div>{{ post.created.toFormat("MMM d") }}</div>
+    </a>
   </nav>
 </template>
