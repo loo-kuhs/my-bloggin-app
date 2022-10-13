@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-const periods = ["Today", "This week", "This month"];
 
+const periods = ["Today", "This week", "This month"];
 const selectedPeriod = ref("Today");
 
 function selectPeriod(period: string) {
@@ -12,11 +12,11 @@ function selectPeriod(period: string) {
 
 <template>
   <nav class="is-primary panel">
-    {{ selectedPeriod }}
     <span class="panel-tabs">
       <a
         v-for="period of periods"
         :key="period"
+        :class="{ 'is-active': period === selectedPeriod }"
         @click="selectPeriod(period)"
       >
         {{ period }}
