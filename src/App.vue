@@ -13,4 +13,6 @@ import Navbar from "./components/Navbar.vue";
 
 <style>
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
+@import "highlight.js/styles/base16/solarized-dark.css";
+@import "./style.css";
 </style>
