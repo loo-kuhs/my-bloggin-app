@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 import { TimelinePost } from "../posts";
 import { marked } from "marked";
 import { usePosts } from "../stores/posts";
@@ -14,7 +15,9 @@ const title = ref(props.post.title);
 const content = ref(props.post.markdown);
 const html = ref("");
 const contentEditable = ref<HTMLDivElement>();
+
 const posts = usePosts();
+const router = useRouter();
 
 function parseHTML(markdown: string) {
   marked.parse(
@@ -62,14 +65,15 @@ function handleInput() {
   content.value = contentEditable.value.innerText;
 }
 
-function handleClick() {
+async function handleClick() {
   const newPost: TimelinePost = {
     ...props.post,
     title: title.value,
     markdown: content.value,
     html: html.value,
   };
-  posts.createPost(newPost);
+  await posts.createPost(newPost);
+  router.push("/");
 }
 </script>
 
