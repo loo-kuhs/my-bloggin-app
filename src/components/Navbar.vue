@@ -6,4 +6,6 @@
       </div>
     </div>
   </div>
+
+  <Teleport to="#modal"> Content to be rendered. </Teleport>
 </template>
