@@ -2,6 +2,8 @@
 import { computed, ref } from "@vue/reactivity";
 import { validate, length, required } from "../validation";
 import { NewUser } from "../users";
+import { useUsers } from "../stores/users";
+import { useModal } from "../composables/modal";
 import FormInput from "./FormInput.vue";
 
 const username = ref("");
@@ -18,7 +20,10 @@ const isInvalid = computed(() => {
   return !usernameStatus.value.valid || !passwordStatus.value.valid;
 });
 
-function handleSubmit() {
+const userStore = useUsers();
+const modal = useModal();
+
+async function handleSubmit() {
   if (isInvalid.value) return;
 
   const newUser: NewUser = {
@@ -26,7 +31,11 @@ function handleSubmit() {
     password: password.value,
   };
 
-  console.log(newUser);
+  try {
+    await userStore.createUser(newUser);
+  } catch (e) {}
+
+  modal.hideModal();
 }
 </script>
 
