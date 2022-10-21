@@ -3,7 +3,6 @@ import { User, NewUser } from "../users";
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import { rest } from "lodash";
 
 const app = express();
 app.use(cors());
