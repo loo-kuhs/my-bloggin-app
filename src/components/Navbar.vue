@@ -16,13 +16,17 @@ const usersStore = useUsers();
       </div>
 
       <div v-else class="buttons">
-        <button class="button" @click="modal.showModal()">Sign up</button>
-        <RouterLink to="/posts/new" class="button">Sign In</RouterLink>
+        <button class="button" @click="modal.showModal('signUp')">
+          Sign up
+        </button>
+        <button class="button" @click="modal.showModal('signIn')">
+          Sign in
+        </button>
       </div>
     </div>
   </div>
 
   <Teleport to="#modal">
-    <SignupForm />
+    <component :is="modal.component.value" />
   </Teleport>
 </template>
