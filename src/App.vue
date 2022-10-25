@@ -1,26 +1,18 @@
 <script lang="ts" setup>
 import { computed } from "@vue/reactivity";
 import { useModal } from "./composables/modal";
+import { useUsers } from "./stores/users";
 import Navbar from "./components/Navbar.vue";
 
 const modal = useModal();
-
+const usersStore = useUsers();
 const modalStyle = computed(() => {
   return {
     display: modal.show.value ? "block" : "none",
   };
 });
 
-async function authenticate() {
-  const res = await window.fetch("/api/current-user", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  console.log(await res.json());
-}
-
-authenticate()
+usersStore.authenticate();
 </script>
 
 <template>

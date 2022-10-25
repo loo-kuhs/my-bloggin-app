@@ -5,7 +5,6 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { today, thisWeek, thisMonth, Post } from "../posts";
 import { User, NewUser } from "../users";
-import { createLogicalAnd } from "typescript";
 
 const app = express();
 app.use(cors());
