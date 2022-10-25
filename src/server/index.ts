@@ -5,6 +5,7 @@ import cors from "cors";
 import express, { Request, Response } from "express";
 import { today, thisWeek, thisMonth, Post } from "../posts";
 import { User, NewUser } from "../users";
+import { createLogicalAnd } from "typescript";
 
 const app = express();
 app.use(cors());
@@ -34,6 +35,16 @@ function authenticate(id: string, req: Request, res: Response) {
   });
   res.cookie(COOKIE, token, { httpOnly: true });
 }
+
+app.get("/current-user", (req, res) => {
+  try {
+    const token = req.cookies[COOKIE];
+    const result = jsonwebtoken.verify(token, SECRET) as { id: string };
+    res.json({ id: result.id });
+  } catch (e) {
+    res.status(404).end();
+  }
+});
 
 app.post<{}, {}, NewUser>("/users", (req, res) => {
   const user: User = { ...req.body, id: (Math.random() * 100000).toFixed() };
