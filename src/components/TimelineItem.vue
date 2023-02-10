@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { TimelinePost } from "../posts";
+import { TimelinePost } from '../posts'
 
 defineProps<{
-  post: TimelinePost;
-}>();
+  post: TimelinePost
+}>()
 </script>
 
 <template>
-  <a
+  <RouterLink
+    :to="`/posts/${post.id}`"
     class="panel-block is-flex is-flex-direction-column is-align-items-flex-start"
   >
     <a>{{ post.title }}</a>
-    <div>{{ post.created.toFormat("MMM d") }}</div>
-  </a>
+    <div>{{ post.created.toFormat('MMM d') }}</div>
+  </RouterLink>
 </template>
