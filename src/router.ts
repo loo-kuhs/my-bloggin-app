@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUsers } from './stores/users'
 import Home from './views/Home.vue'
 import NewPost from './views/NewPost.vue'
 import ShowPost from './views/ShowPost.vue'
-import { useUsers } from './stores/users'
+import EditPost from './views/EditPost.vue'
 
 export const router = createRouter({
   history: createWebHistory(),
@@ -23,6 +24,10 @@ export const router = createRouter({
           }
         }
       },
+    },
+    {
+      path: '/posts/:id/edit',
+      component: EditPost,
     },
     {
       path: '/posts/:id',

@@ -1,23 +1,23 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from "vue";
-import { useRouter } from "vue-router";
-import { TimelinePost } from "../posts";
-import { marked } from "marked";
-import { usePosts } from "../stores/posts";
-import highlightjs from "highlight.js";
-import debounce from "lodash/debounce";
+import { ref, onMounted, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { Post, TimelinePost } from '../posts'
+import { marked } from 'marked'
+import { usePosts } from '../stores/posts'
+import highlightjs from 'highlight.js'
+import debounce from 'lodash/debounce'
 
 const props = defineProps<{
-  post: TimelinePost;
-}>();
+  post: TimelinePost | Post
+}>()
 
-const title = ref(props.post.title);
-const content = ref(props.post.markdown);
-const html = ref("");
-const contentEditable = ref<HTMLDivElement>();
+const title = ref(props.post.title)
+const content = ref(props.post.markdown)
+const html = ref('')
+const contentEditable = ref<HTMLDivElement>()
 
-const posts = usePosts();
-const router = useRouter();
+const posts = usePosts()
+const router = useRouter()
 
 function parseHTML(markdown: string) {
   marked.parse(
@@ -26,13 +26,13 @@ function parseHTML(markdown: string) {
       gfm: true,
       breaks: true,
       highlight: (code) => {
-        return highlightjs.highlightAuto(code).value;
+        return highlightjs.highlightAuto(code).value
       },
     },
     (err, parseResult) => {
-      html.value = parseResult;
+      html.value = parseResult
     }
-  );
+  )
 }
 
 /**
@@ -44,25 +44,25 @@ function parseHTML(markdown: string) {
 watch(
   content,
   debounce((newContent) => {
-    parseHTML(newContent);
+    parseHTML(newContent)
   }, 250),
   {
     immediate: true,
   }
-);
+)
 
 onMounted(() => {
   if (!contentEditable.value)
-    throw new Error("ContentEditable DOM node was not found.");
+    throw new Error('ContentEditable DOM node was not found.')
 
-  contentEditable.value.innerText = content.value;
-});
+  contentEditable.value.innerText = content.value
+})
 
 function handleInput() {
   if (!contentEditable.value)
-    throw new Error("ContentEditable DOM node was not found.");
+    throw new Error('ContentEditable DOM node was not found.')
 
-  content.value = contentEditable.value.innerText;
+  content.value = contentEditable.value.innerText
 }
 
 async function handleClick() {
@@ -71,9 +71,9 @@ async function handleClick() {
     title: title.value,
     markdown: content.value,
     html: html.value,
-  };
-  await posts.createPost(newPost);
-  router.push("/");
+  }
+  await posts.createPost(newPost)
+  router.push('/')
 }
 </script>
 
