@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { ref, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import { Post, TimelinePost } from '../posts'
 import { marked } from 'marked'
+import { Post, TimelinePost } from '../posts'
+import { ref, onMounted, watch } from 'vue'
 import { usePosts } from '../stores/posts'
-import highlightjs from 'highlight.js'
+import { useRouter } from 'vue-router'
+import { useUsers } from '../stores/users'
 import debounce from 'lodash/debounce'
+import highlightjs from 'highlight.js'
+import { type } from 'os'
 
 const props = defineProps<{
   post: TimelinePost | Post
@@ -18,6 +20,7 @@ const contentEditable = ref<HTMLDivElement>()
 
 const posts = usePosts()
 const router = useRouter()
+const usersStore = useUsers()
 
 function parseHTML(markdown: string) {
   marked.parse(
@@ -66,9 +69,18 @@ function handleInput() {
 }
 
 async function handleClick() {
-  const newPost: TimelinePost = {
+  if (!usersStore.currentUserId) {
+    throw Error('User was not logged in.')
+  }
+
+  const newPost: Post = {
     ...props.post,
+    created:
+      typeof props.post.created === 'string'
+        ? props.post.created
+        : props.post.created.toISO(),
     title: title.value,
+    authorId: usersStore.currentUserId,
     markdown: content.value,
     html: html.value,
   }

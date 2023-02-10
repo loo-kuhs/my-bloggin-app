@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { RouterLink, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { usePosts } from '../stores/posts'
 
 const route = useRoute()
@@ -20,8 +20,10 @@ if (!post) {
       <RouterLink
         :to="`/posts/${post.id}/edit`"
         class="is-link button is-rounded"
-        >Edit Post</RouterLink
       >
+        Edit Post
+      </RouterLink>
+
       <h1>{{ post.title }}</h1>
       <div v-html="post.html" />
     </div>
