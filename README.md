@@ -1,10 +1,32 @@
-# Vue 3 + TypeScript + Vite
+# Blogging App
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is a blogging app built with Vue 3 and TypeScript, I'm using this project to learn Vue 3 and TypeScript.
 
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+
+## Project setup
+
+Clone the project and install the dependencies.
+
+```
+git clone https://github.com/loo-kuhs/my-bloggin-app.git
+cd my-bloggin-app
+npm install
+```
+
+### Run server
+
+```
+npm run server
+```
+
+### Run vue app
+
+```
+npm run dev
+```
 
 ## Type Support For `.vue` Imports in TS
 
