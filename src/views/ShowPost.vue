@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-import { useRoute } from 'vue-router'
-import { usePosts } from '../stores/posts'
+  import { useRoute } from 'vue-router'
+  import { usePosts } from '../stores/posts'
 
-const route = useRoute()
-const postStore = usePosts()
+  const route = useRoute()
+  const postStore = usePosts()
 
-const id = route.params.id as string
-const post = postStore.all.get(id)
+  const id = route.params.id as string
+  const post = postStore.all.get(id)
 
-if (!post) {
-  throw Error(`Post with id ${id} not found`)
-}
+  if (!post) {
+    throw Error(`Post with id ${id} not found`)
+  }
 </script>
 
 <template>
@@ -19,8 +19,7 @@ if (!post) {
     <div class="column is-two-thirds">
       <RouterLink
         :to="`/posts/${post.id}/edit`"
-        class="is-link button is-rounded"
-      >
+        class="is-link button is-rounded">
         Edit Post
       </RouterLink>
 

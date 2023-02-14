@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import { computed } from "@vue/reactivity";
-import { useModal } from "./composables/modal";
-import { useUsers } from "./stores/users";
-import Navbar from "./components/Navbar.vue";
+  import { computed } from '@vue/reactivity'
+  import { useModal } from './composables/modal'
+  import { useUsers } from './stores/users'
+  import Navbar from './components/Navbar.vue'
 
-const modal = useModal();
-const usersStore = useUsers();
-const modalStyle = computed(() => {
-  return {
-    display: modal.show.value ? "block" : "none",
-  };
-});
+  const modal = useModal()
+  const usersStore = useUsers()
+  const modalStyle = computed(() => {
+    return {
+      display: modal.show.value ? 'block' : 'none',
+    }
+  })
 
-usersStore.authenticate();
+  usersStore.authenticate()
 </script>
 
 <template>
@@ -22,7 +22,9 @@ usersStore.authenticate();
         <div id="modal"></div>
       </div>
     </div>
-    <button class="modal-close is-large" @click="modal.hideModal()"></button>
+    <button
+      class="modal-close is-large"
+      @click="modal.hideModal()"></button>
   </div>
 
   <div class="section">
@@ -34,7 +36,7 @@ usersStore.authenticate();
 </template>
 
 <style>
-@import "https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css";
-@import "highlight.js/styles/base16/solarized-dark.css";
-@import "./style.css";
+  @import 'https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css';
+  @import 'highlight.js/styles/base16/solarized-dark.css';
+  @import './style.css';
 </style>
