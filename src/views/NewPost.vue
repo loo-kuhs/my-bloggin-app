@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import PostWriter from '../components/PostWriter.vue'
   import { DateTime } from 'luxon'
+  import { useRouter } from 'vue-router'
+  import PostWriter from '../components/PostWriter.vue'
   import { Post, TimelinePost } from '../posts'
   import { usePosts } from '../stores/posts'
-  import { useRouter } from 'vue-router'
   import { useUsers } from '../stores/users'
 
   const usersStore = useUsers()

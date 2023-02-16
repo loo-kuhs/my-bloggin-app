@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-  import debounce from 'lodash/debounce'
   import highlightjs from 'highlight.js'
-  import { Post, TimelinePost } from '../posts'
+  import debounce from 'lodash/debounce'
   import { marked } from 'marked'
-  import { ref, onMounted, watch } from 'vue'
-  import { usePosts } from '../stores/posts'
+  import { onMounted, ref, watch } from 'vue'
   import { useRouter } from 'vue-router'
+  import { Post, TimelinePost } from '../posts'
+  import { usePosts } from '../stores/posts'
   import { useUsers } from '../stores/users'
 
   const props = defineProps<{

@@ -50,6 +50,17 @@ export const usePosts = defineStore('posts', {
         body,
       })
     },
+    
+    updatePost(post: Post) {
+      const body = JSON.stringify(post)
+      return window.fetch('/api/posts', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body,
+      })
+    },
   },
 
   getters: {
@@ -59,7 +70,9 @@ export const usePosts = defineStore('posts', {
           const post = state.all.get(id)
 
           if (!post)
-            throw new Error(`Post with id of ${id} was expected but not found.`)
+            throw new Error(
+              `Post with id of ${id} was expected but not found.`
+            )
 
           return {
             ...post,
