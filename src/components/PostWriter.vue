@@ -1,92 +1,94 @@
 <script lang="ts" setup>
-import { marked } from 'marked'
-import { Post, TimelinePost } from '../posts'
-import { ref, onMounted, watch } from 'vue'
-import { usePosts } from '../stores/posts'
-import { useRouter } from 'vue-router'
-import { useUsers } from '../stores/users'
-import debounce from 'lodash/debounce'
-import highlightjs from 'highlight.js'
-import { type } from 'os'
+  import debounce from 'lodash/debounce'
+  import highlightjs from 'highlight.js'
+  import { Post, TimelinePost } from '../posts'
+  import { marked } from 'marked'
+  import { ref, onMounted, watch } from 'vue'
+  import { usePosts } from '../stores/posts'
+  import { useRouter } from 'vue-router'
+  import { useUsers } from '../stores/users'
 
-const props = defineProps<{
-  post: TimelinePost | Post
-}>()
+  const props = defineProps<{
+    post: TimelinePost | Post
+  }>()
 
-const title = ref(props.post.title)
-const content = ref(props.post.markdown)
-const html = ref('')
-const contentEditable = ref<HTMLDivElement>()
+  const emit = defineEmits<{
+    (event: 'submit', post: Post): void
+  }>()
 
-const posts = usePosts()
-const router = useRouter()
-const usersStore = useUsers()
+  const title = ref(props.post.title)
+  const content = ref(props.post.markdown)
+  const html = ref('')
+  const contentEditable = ref<HTMLDivElement>()
 
-function parseHTML(markdown: string) {
-  marked.parse(
-    markdown,
-    {
-      gfm: true,
-      breaks: true,
-      highlight: (code) => {
-        return highlightjs.highlightAuto(code).value
+  const posts = usePosts()
+  const router = useRouter()
+  const usersStore = useUsers()
+
+  function parseHTML(markdown: string) {
+    marked.parse(
+      markdown,
+      {
+        gfm: true,
+        breaks: true,
+        highlight: (code) => {
+          return highlightjs.highlightAuto(code).value
+        },
       },
-    },
-    (err, parseResult) => {
-      html.value = parseResult
+      (err, parseResult) => {
+        html.value = parseResult
+      }
+    )
+  }
+
+  /**
+   * watch(content, debounce(parseHtml, 250), {
+   *  immediate: true
+   * })
+   */
+
+  watch(
+    content,
+    debounce((newContent) => {
+      parseHTML(newContent)
+    }, 250),
+    {
+      immediate: true,
     }
   )
-}
 
-/**
- * watch(content, debounce(parseHtml, 250), {
- *  immediate: true
- * })
- */
+  onMounted(() => {
+    if (!contentEditable.value)
+      throw new Error('ContentEditable DOM node was not found.')
 
-watch(
-  content,
-  debounce((newContent) => {
-    parseHTML(newContent)
-  }, 250),
-  {
-    immediate: true,
-  }
-)
+    contentEditable.value.innerText = content.value
+  })
 
-onMounted(() => {
-  if (!contentEditable.value)
-    throw new Error('ContentEditable DOM node was not found.')
+  function handleInput() {
+    if (!contentEditable.value)
+      throw new Error('ContentEditable DOM node was not found.')
 
-  contentEditable.value.innerText = content.value
-})
-
-function handleInput() {
-  if (!contentEditable.value)
-    throw new Error('ContentEditable DOM node was not found.')
-
-  content.value = contentEditable.value.innerText
-}
-
-async function handleClick() {
-  if (!usersStore.currentUserId) {
-    throw Error('User was not logged in.')
+    content.value = contentEditable.value.innerText
   }
 
-  const newPost: Post = {
-    ...props.post,
-    created:
-      typeof props.post.created === 'string'
-        ? props.post.created
-        : props.post.created.toISO(),
-    title: title.value,
-    authorId: usersStore.currentUserId,
-    markdown: content.value,
-    html: html.value,
+  async function handleClick() {
+    if (!usersStore.currentUserId) {
+      throw Error('User was not logged in.')
+    }
+
+    const newPost: Post = {
+      ...props.post,
+      created:
+        typeof props.post.created === 'string'
+          ? props.post.created
+          : props.post.created.toISO(),
+      title: title.value,
+      authorId: usersStore.currentUserId,
+      markdown: content.value,
+      html: html.value,
+    }
+    emit('submit', newPost)
   }
-  await posts.createPost(newPost)
-  router.push('/')
-}
 </script>
 
 <template>
@@ -102,7 +104,10 @@ async function handleClick() {
 
   <div class="columns">
     <div class="column">
-      <div contenteditable ref="contentEditable" @input="handleInput" />
+      <div
+        contenteditable
+        ref="contentEditable"
+        @input="handleInput" />
     </div>
     <div class="column">
       <div v-html="html" />
@@ -111,7 +116,9 @@ async function handleClick() {
 
   <div class="columns">
     <div class="column">
-      <button class="button is-primary is-pulled-right" @click="handleClick">
+      <button
+        class="button is-primary is-pulled-right"
+        @click="handleClick">
         Save it!
       </button>
     </div>
